@@ -15,8 +15,11 @@ st.title("Myopia Progression Model")
 name = st.text_input("Enter your name")
 sex = st.radio("Select sex", ["Male", "Female", "Other"])
 age = st.slider("Age", 1,109)
-mommy = st.selectbox("Mother myopic?", [0, 1])
-dadmy = st.selectbox("Father myopic?", [0, 1])
+mom_myopic = st.selectbox("Mother myopic?", ["Select an answer","NO", "YES"])
+dad_myopic = st.selectbox("Father myopic?", ["Select an answer","NO", "YES"])
+mommy = 1 if mom_myopic == "Yes" else 0
+dadmy = 1 if dad_myopic == "Yes" else 0
+
 screen_time = st.slider("Screen time (hours/day)", 1,24)
 
 #Prescription details

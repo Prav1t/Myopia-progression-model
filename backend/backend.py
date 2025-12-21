@@ -16,7 +16,7 @@ def inspect_data(df):
     print("\nFirst 5 rows:")
     print(df)
 
-    
+
 if __name__ == "__main__":
     df = load_data()
     inspect_data(df)
