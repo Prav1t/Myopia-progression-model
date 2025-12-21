@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sklearn.linear_model import LinearRegression
 
 DATA_PATH = "database/myopia.csv"
 
@@ -14,6 +15,8 @@ def inspect_data(df):
     print(df.columns)
     print("\nFirst 5 rows:")
     print(df)
+
+    
 if __name__ == "__main__":
     df = load_data()
     inspect_data(df)
@@ -48,6 +51,8 @@ if __name__ == "__main__":
     print("\nCleaned data preview:")
     print(df_clean.head())
 
+
+"""
 #dummy
 def predict_dummy(age, mommy, dadmy):
     ages = list(range(age, 109))
@@ -57,4 +62,32 @@ def predict_dummy(age, mommy, dadmy):
     return {
         "ages": ages,
         "spheq": spheq
+    }
+"""
+
+
+def train_model(df):
+    X = df[["AGE", "MOMMY", "DADMY"]]
+    Y = df["SPHEQ"]
+    model = LinearRegression()
+    model.fit(X,Y)
+    return model
+
+def progression_tracker(age,mommy,dadmy):
+    df = get_clean_data()
+    model = train_model(df)
+    end_age = 25
+    ages = list(range(age,end_age + 1))
+
+    X_pred = pd.DataFrame({
+        "AGE" : ages,
+        "MOMMY" : [mommy] * len(ages),
+        "DADMY" : [dadmy] * len(ages) 
+    })
+
+    spheq_pred = model.predict(X_pred)
+
+    return{
+        "ages" : ages,
+        "spheq" : spheq_pred.tolist()
     }

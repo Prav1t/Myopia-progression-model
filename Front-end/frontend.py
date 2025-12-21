@@ -4,7 +4,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 import streamlit as st
 import pandas as pd
-from backend.backend import predict_dummy
+from backend.backend import progression_tracker
 def configure_page() -> None:
     st.set_page_config(page_title="Myopia Progression Model", layout="wide")
 
@@ -27,10 +27,10 @@ axis = st.number_input("Axis (0–180°)", min_value = 0, max_value=180, step=1)
 sphere = st.number_input("Sphere", min_value = -30.00, max_value = 20.00, step = 0.25)
 conditions = st.text_input("Enter conditions")
 
-"""
+
 #dummy
 if st.button("Run Prediction"):
-    result = predict_dummy(age, mommy, dadmy)
+    result = progression_tracker(age, mommy, dadmy)
 
     df_plot = pd.DataFrame({
         "Age": result["ages"],
@@ -42,4 +42,3 @@ if st.button("Run Prediction"):
 #submit button
 if st.button("Submit"):
     st.success("Inputs saved successfully.")
-"""
