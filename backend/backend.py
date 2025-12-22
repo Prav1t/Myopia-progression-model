@@ -29,14 +29,24 @@ def prepare_data(df):
         "GENDER",
         "SPHEQ",
         "MOMMY",
-        "DADMY"
+        "DADMY",
+        "TVHR",
+        "READHR",
+        "SPORTHR"
+        
     ]
     df = df[cols]
-    # if != spheq row is useless 
-    df = df.dropna(subset=["SPHEQ"])
+    #Convert to num
     for col in cols:
         df[col] = pd.to_numeric(df[col], errors="coerce")
+    # if != spheq row is useless 
+    df = df.dropna(subset=["SPHEQ"])
+    
+
+    df["SCREEN_TIME"] = df["TVHR"]+ 0.5 * df["READHR"]
+    df["OUTDOOR_TIME"] = df["SPORTHR"]
     return df
+
 
 def get_clean_data():
     df = load_data()
@@ -67,13 +77,13 @@ def predict_dummy(age, mommy, dadmy):
 
 
 def train_model(df):
-    X = df[["AGE", "MOMMY", "DADMY"]]
+    X = df[["AGE", "GENDER", "MOMMY", "DADMY", "SCREEN_TIME", "OUTDOOR_TIME"]]
     Y = df["SPHEQ"]
     model = LinearRegression()
     model.fit(X,Y)
     return model
 
-def progression_tracker(age,mommy,dadmy):
+def progression_tracker(age, gender, mommy, dadmy, screen_time, outdoor_time):
     df = get_clean_data()
     model = train_model(df)
     end_age = 25
@@ -81,8 +91,11 @@ def progression_tracker(age,mommy,dadmy):
 
     X_pred = pd.DataFrame({
         "AGE" : ages,
+        "GENDER": [gender] * len(ages),
         "MOMMY" : [mommy] * len(ages),
-        "DADMY" : [dadmy] * len(ages) 
+        "DADMY" : [dadmy] * len(ages) ,
+        "SCREEN_TIME" : [screen_time] * len(ages),
+        "OUTDOOR_TIME" : [outdoor_time] * len(ages)
     })
 
     spheq_pred = model.predict(X_pred)
