@@ -15,9 +15,18 @@ st.title("Myopia Progression Model")
 name = st.text_input("Enter your name")
 sex = st.radio("Select sex", ["Male", "Female", "Other"])
 age = st.slider("Age", 1,109)
-mommy = st.selectbox("Mother myopic?", [0, 1])
-dadmy = st.selectbox("Father myopic?", [0, 1])
-screen_time = st.slider("Screen time (hours/day)", 1,24)
+mom_myopic = st.selectbox("Mother myopic?", ["Select an answer","NO", "YES"])
+dad_myopic = st.selectbox("Father myopic?", ["Select an answer","NO", "YES"])
+mommy = 1 if mom_myopic == "Yes" else 0
+dadmy = 1 if dad_myopic == "Yes" else 0
+
+tv_time = st.slider("TV Time (hours/day)", 1,24)
+reading_time = st.slider("Reading Time (hours/day)", 1,24)
+sport_time = st.slider("Sport / outdoor time (hours/day)", 0, 10)
+screen_time = tv_time + reading_time
+outdoor_time = sport_time
+gender_map = {"Male": 1, "Female": 0, "Other": 0}
+gender_num = gender_map[sex]
 
 #Prescription details
 odright = st.number_input("Enter your OD(Right eye) prescription", step = 0.25)
@@ -28,9 +37,15 @@ sphere = st.number_input("Sphere", min_value = -30.00, max_value = 20.00, step =
 conditions = st.text_input("Enter conditions")
 
 
-#dummy
 if st.button("Run Prediction"):
-    result = progression_tracker(age, mommy, dadmy)
+    result = progression_tracker(
+        age=age,
+        gender=gender_num,
+        mommy=mommy,
+        dadmy=dadmy,
+        screen_time=screen_time,
+        outdoor_time=outdoor_time
+    )
 
     df_plot = pd.DataFrame({
         "Age": result["ages"],
@@ -38,6 +53,7 @@ if st.button("Run Prediction"):
     })
 
     st.line_chart(df_plot.set_index("Age"))
+
 
 #submit button
 if st.button("Submit"):
