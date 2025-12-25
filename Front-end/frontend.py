@@ -36,6 +36,14 @@ axis = st.number_input("Axis (0–180°)", min_value = 0, max_value=180, step=1)
 sphere = st.number_input("Sphere", min_value = -30.00, max_value = 20.00, step = 0.25)
 conditions = st.text_input("Enter conditions")
 
+def compute_spheq(sphere,clyinder):
+    if  cylinder!= 0:
+        return sphere + (cylinder/2)
+    return sphere
+
+spheq_left = compute_spheq(osleft,cylinder)
+spheq_right = compute_spheq(odright, cylinder)
+
 
 if st.button("Run Prediction"):
     result = progression_tracker(
@@ -45,11 +53,16 @@ if st.button("Run Prediction"):
         dadmy=dadmy,
         screen_time=screen_time,
         outdoor_time=outdoor_time
+        
     )
+    left_curve = [spheq_left + d for d in result["delta"]]
+    right_curve = [spheq_right + d for d in result["delta"]]
+
 
     df_plot = pd.DataFrame({
         "Age": result["ages"],
-        "SPHEQ": result["spheq"]
+        "Left Eye (OS)": left_curve,
+        "Right Eye (OD)": right_curve,
     })
 
     st.line_chart(df_plot.set_index("Age"))

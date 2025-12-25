@@ -99,8 +99,10 @@ def progression_tracker(age, gender, mommy, dadmy, screen_time, outdoor_time):
     })
 
     spheq_pred = model.predict(X_pred)
+    delta = spheq_pred - spheq_pred[0]
+
 
     return{
         "ages" : ages,
-        "spheq" : spheq_pred.tolist()
+        "delta" : delta.tolist()
     }
