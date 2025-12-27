@@ -6,7 +6,7 @@ import streamlit as st
 import pandas as pd
 from backend.backend import progression_tracker
 def configure_page() -> None:
-    st.set_page_config(page_title="Myopia Progression Model", layout="wide")
+    st.set_page_config(page_title="Progression Model", layout="wide")
 
 configure_page()
 
