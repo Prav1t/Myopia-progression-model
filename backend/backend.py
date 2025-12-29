@@ -45,7 +45,6 @@ def prepare_data(df):
 
     df["SCREEN_TIME"] = df["TVHR"]+ 0.5 * df["READHR"]
     df["OUTDOOR_TIME"] = df["SPORTHR"]
-    df["AGE2"] = df["AGE"] ** 2
     df["AGE_x_SCREEN"] = df["AGE"] * df["SCREEN_TIME"]
     df["AGE_x_OUTDOOR"] = df["AGE"] * df["OUTDOOR_TIME"]
     df["GENETIC_RISK"] = df["MOMMY"] + df["DADMY"]
@@ -81,7 +80,7 @@ def predict_dummy(age, mommy, dadmy):
 
 
 def train_model(df):
-    X = df[["AGE", "AGE2","SCREEN_TIME", "OUTDOOR_TIME", "AGE_x_SCREEN", "AGE_x_OUTDOOR", "GENETIC_RISK", "GENDER"]]
+    X = df[["AGE","SCREEN_TIME", "OUTDOOR_TIME", "AGE_x_SCREEN", "AGE_x_OUTDOOR", "GENETIC_RISK", "GENDER"]]
     Y = df["SPHEQ"]
     model = LinearRegression()
     model.fit(X,Y)
@@ -95,7 +94,6 @@ def progression_tracker(age, gender, mommy, dadmy, screen_time, outdoor_time):
     n = len(ages)
     X_pred = pd.DataFrame({
         "AGE" : ages,
-        "AGE2" : [a ** 2 for a in ages],
         "SCREEN_TIME" : [screen_time] * n,
         "OUTDOOR_TIME" : [outdoor_time] * n,
         "AGE_x_SCREEN": [a * screen_time for a in ages] ,
